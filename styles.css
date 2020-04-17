@@ -226,7 +226,7 @@ h2 span {
 
 .comment-carousel {
     margin-top: -1px;
-    background: #c271ff;
+    background-color: #c271ff;
 }
 
 .item-content {
@@ -296,9 +296,6 @@ h2 span {
 
 .social-link {
     color: white;
-}
-
-.social-link:hover {
 }
 
 a:hover {
@@ -408,3 +405,22 @@ a:hover {
 .menu p {
     margin-bottom: 0;
 }
+
+.loader {
+    border: 10px solid #f3f3f3;
+    border-top: 10px solid #c271ff;
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    animation: spin 2s linear infinite;
+    margin: auto;
+  }
+  
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
