@@ -20,7 +20,7 @@ $(document).ready(() => {
         `
     }
     $.get("https://smileschool-api.hbtn.info/popular-tutorials", (data) => {
-        createVideoCard(data, "#tutorial-loader", "#popular-carousel", 'popular');
+        createVideoCard(data, "#popular-loader", "#popular-carousel", 'popular');
       })
 
       const calcQuerySize = () => {
@@ -37,7 +37,7 @@ $(document).ready(() => {
             $(carousel).append(
               `
               <div class="carousel-item ${i === 0 ? "active" : ""}">
-                <div id="${id}${i}">
+                <div id="${id}${i}" class="col-sm-12 col-md-6 col-lg-3">
                 </div>
               </div>
               `
