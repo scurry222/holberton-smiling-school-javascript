@@ -409,62 +409,62 @@ a:hover {
 }
 
 @media (max-width: 768px) {
-    #popular-carousel .carousel-item > div {
+    .v-2 .carousel-item > div {
         display: block;
         background-color: white;
     }
-    #popular-carousel .carousel-item > div:first-child {
+    .v-2 .carousel-item > div:first-child {
         display: none;
     }
 }
 
-#popular-carousel .carousel-item.active,
-#popular-carousel .carousel-item-next,
-#popular-carousel .carousel-item-prev {
+.v-2 .carousel-item.active,
+.v-2 .carousel-item-next,
+.v-2 .carousel-item-prev {
     display: flex;
 }
 
 @media (max-width: 768px) {
     
-    #popular-carousel .carousel-item-right.active,
-    #popular-carousel .carousel-item-next {
+    .v-2 .carousel-item-right.active,
+    .v-2 .carousel-item-next {
       transform: translateX(100%);
     }
     
-    #popular-carousel .carousel-item-left.active, 
-    #popular-carousel .carousel-item-prev {
+    .v-2 .carousel-item-left.active, 
+    .v-2 .carousel-item-prev {
       transform: translateX(-100%);
     }
 }
 
 @media (min-width: 768px) {
     
-    #popular-carousel .carousel-item-right.active,
-    #popular-carousel .carousel-item-next {
+    .v-2 .carousel-item-right.active,
+    .v-2 .carousel-item-next {
       transform: translateX(50%);
     }
     
-    #popular-carousel .carousel-item-left.active, 
-    #popular-carousel .carousel-item-prev {
+    .v-2 .carousel-item-left.active, 
+    .v-2 .carousel-item-prev {
       transform: translateX(-50%);
     }
 }
 
 @media (min-width: 992px) {
     
-    #popular-carousel .carousel-item-right.active,
-    #popular-carousel .carousel-item-next {
+    .v-2 .carousel-item-right.active,
+    .v-2 .carousel-item-next {
       transform: translateX(25%);
     }
     
-    #popular-carousel .carousel-item-left.active, 
-    #popular-carousel .carousel-item-prev {
+    .v-2 .carousel-item-left.active, 
+    .v-2 .carousel-item-prev {
       transform: translateX(-25%);
     }
 }
 
-#popular-carousel .carousel-item-right,
-#popular-carousel .carousel-item-left{ 
+.v-2 .carousel-item-right,
+.v-2 .carousel-item-left{ 
   transform: translateX(0);
 }
 

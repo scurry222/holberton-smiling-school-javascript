@@ -22,15 +22,10 @@ $(document).ready(() => {
     $.get("https://smileschool-api.hbtn.info/popular-tutorials", (data) => {
         createVideoCard(data, "#popular-loader", "#popular-carousel", 'popular');
       })
+    $.get("https://smileschool-api.hbtn.info/latest-videos", (data) => {
+        createVideoCard(data, "#latest-loader", "#latest-carousel", 'latest');
+    })
 
-      const calcQuerySize = () => {
-        const width = $(window).innerWidth();
-        console.log(width);
-        let items = 0;
-        (width < 375) ? items = 1 : (width < 768) ? items = 2 : items = 4;
-
-        return items;
-    }
     const createVideoCard = (data, loader, carousel, id) => {
         $(loader).hide()
         for (let i = 0; i < data.length; i++) {
@@ -45,7 +40,7 @@ $(document).ready(() => {
           $(`#${id}${i}`).append(createTutorial(data[i]))
         }
 
-        $('#carousel2 .carousel-item').each(function () {
+        $(`${carousel} .carousel-item`).each(function () {
             var minPerSlide = 3;
             var next = $(this).next();
             if (!next.length) {
