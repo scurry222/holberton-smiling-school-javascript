@@ -406,6 +406,40 @@ a:hover {
     margin-bottom: 0;
 }
 
+@media (max-width: 768px) {
+    #popular-carousel .carousel-item > div {
+        display: block;
+    }
+    #popular-carousel .carousel-item > div:first-child {
+        display: none;
+    }
+}
+
+#popular-carousel .carousel-item.active,
+#popular-carousel .carousel-item-next,
+#popular-carousel .carousel-item-prev {
+    display: flex;
+}
+
+@media (min-width: 768px) {
+    
+    #popular-carousel .carousel-item-right.active,
+    #popular-carousel .carousel-item-next {
+      transform: translateX(25%);
+    }
+    
+    #popular-carousel .carousel-item-left.active, 
+    #popular-carousel .carousel-item-prev {
+      transform: translateX(-25%);
+    }
+}
+
+#popular-carousel .carousel-item-right,
+#popular-carousel .carousel-item-left{ 
+  transform: translateX(0);
+}
+
+
 .loader {
     border: 10px solid #f3f3f3;
     border-top: 10px solid #c271ff;
