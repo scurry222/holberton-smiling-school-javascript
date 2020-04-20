@@ -37,7 +37,7 @@ $(document).ready(() => {
             $(carousel).append(
               `
               <div class="carousel-item ${i === 0 ? "active" : ""}">
-                <div id="${id}${i}" class="col-sm-12 col-md-6 col-lg-3">
+                <div id="${id}${i}" class="col-12 col-sm-12 col-md-6 col-lg-3">
                 </div>
               </div>
               `
@@ -46,7 +46,7 @@ $(document).ready(() => {
         }
 
         $('#carousel2 .carousel-item').each(function () {
-            var minPerSlide = 2;
+            var minPerSlide = 3;
             var next = $(this).next();
             if (!next.length) {
               next = $(this).siblings(':first');

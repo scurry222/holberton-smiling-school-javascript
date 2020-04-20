@@ -252,7 +252,9 @@ h2 span {
     display: flex;
     height: 13rem;
     align-items: center;
+    background-image: none;
 }
+
 
 @media only screen and (max-width: 578px) {
     [class^="carousel-control-"] {
@@ -422,6 +424,19 @@ a:hover {
     display: flex;
 }
 
+@media (max-width: 768px) {
+    
+    #popular-carousel .carousel-item-right.active,
+    #popular-carousel .carousel-item-next {
+      transform: translateX(100%);
+    }
+    
+    #popular-carousel .carousel-item-left.active, 
+    #popular-carousel .carousel-item-prev {
+      transform: translateX(-100%);
+    }
+}
+
 @media (min-width: 768px) {
     
     #popular-carousel .carousel-item-right.active,
@@ -433,11 +448,6 @@ a:hover {
     #popular-carousel .carousel-item-prev {
       transform: translateX(-50%);
     }
-}
-
-#popular-carousel .carousel-item-right,
-#popular-carousel .carousel-item-left{ 
-  transform: translateX(0);
 }
 
 @media (min-width: 992px) {
