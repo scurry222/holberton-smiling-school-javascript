@@ -13,7 +13,7 @@ $(document).ready(() => {
 
   $.get("https://smileschool-api.hbtn.info/courses", (data) => {
       const capitalize = (word) => word.charAt(0).toUpperCase() + word.slice(1);
-      const {topics, sorts} = data;
+      const { topics, sorts } = data;
       topics.forEach((e) => {
         e = capitalize(e);
         $("#topic-options").append(`<option value="${e}">${e}</option>`);
@@ -23,19 +23,17 @@ $(document).ready(() => {
         $("#sort-options").append(`<option value="${e}">${e}</option>`);
       })
       showRelevantCourses();
-
   })
 
   const showRelevantCourses = () => {
-    const capitalize = (word) => word.charAt(0).toUpperCase() + word.slice(1);
-    $("#courses-loader").show()
-    $("#filtered-cards-list").empty()
+    $("#courses-loader").show();
+    $("#filtered-cards-list").empty();
     let search = $("#keyword-search").val();
-    search = capitalize(search);
-    console.log(search)
+    if (search) search = search.charAt(0).toUpperCase() + search.slice(1);
     const topic = $("#topic-options option:selected ").val();
     const sortBy = $("#sort-options option:selected").val();
-    $.get("https://smileschool-api.hbtn.info/courses", ({courses}) => {
+    $.get("https://smileschool-api.hbtn.info/courses", (data) => {
+      const { courses } = data;
       courses.filter((e) =>
         topic == "All" && !search.length ? e :
         e.keywords.includes(search) ? e :
