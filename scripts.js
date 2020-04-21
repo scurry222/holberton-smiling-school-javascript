@@ -30,19 +30,21 @@ $(document).ready(() => {
     $("#filtered-cards-list").empty();
     let search = $("#keyword-search").val();
     if (search) search = search.charAt(0).toUpperCase() + search.slice(1);
+    console.log(search == 0)
     const topic = $("#topic-options option:selected ").val();
     const sortBy = $("#sort-options option:selected").val();
     $.get("https://smileschool-api.hbtn.info/courses", (data) => {
       const { courses } = data;
-      courses.filter((e) =>
-        topic == "All" && !search.length ? e :
+      courses
+      .filter((e) =>
         e.keywords.includes(search) ? e :
-        e.topic == topic ? e :
-        null
+       !search.length ? e :
+       e.topic === topic ? e :
+       null
       )
       .sort((a, b) => {
         if (sortBy == "Most Popular")  return b.star - a.star;
-        else if(sortBy == "Most Recent") return b.published_at - a.published_at;
+        else if (sortBy == "Most Recent") return b.published_at - a.published_at;
         else if (sortBy == "Most Viewed") return b.views - a.views;
         else null;
       })

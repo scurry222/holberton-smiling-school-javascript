@@ -13,7 +13,10 @@ h2 {
 
 h2 span {
     color: #c271ff;
-    
+}
+
+label {
+    margin: -2rem;
 }
 
 .offset-sm-right-1 {
