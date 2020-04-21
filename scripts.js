@@ -1,100 +1,150 @@
 $(document).ready(() => {
-    $.get("https://smileschool-api.hbtn.info/quotes", (data) => {
-      $("#comment-loader").hide();
-      data.forEach((d, i) => $("#comment-carousel").append(createComment(d, i)));
-    })
-    const createComment = (d, i) => {
-        return `
-            <div class="carousel-item ${i == 0 ? 'active' : ''}">
-                <div class="row flex-wrap justify-content-center mb-5">
-                    <div class="col col-sm-4 col-md-2 mt-5 d-flex justify-content-xs-end justify-content-center">
-                    <img class="img rounded-circle" src="${d.pic_url}" alt="${d.name}">
-                    </div>
-                    <div class="col-11 col-md-6 col-lg-8 item-content mt-5">
-                    <h6 class="content-title pb-3 mr-sm-2">${d.text}</h6>
-                    <p class="m-0 font-weight-bold">${d.name}</p>
-                    <p class="m-0 font-italic">${d.title}</p>
-                    </div>
-                </div>
-            </div>
-        `
-    }
-    $.get("https://smileschool-api.hbtn.info/popular-tutorials", (data) => {
-        createVideoCard(data, "#popular-loader", "#popular-carousel", 'popular');
+  $.get("https://smileschool-api.hbtn.info/quotes", (data) => {
+    $("#comment-loader").hide();
+    data.forEach((d, i) => $("#comment-carousel").append(createComment(d, i)));
+  })
+
+  $.get("https://smileschool-api.hbtn.info/popular-tutorials", (data) => {
+      createVideoCard(data, "#popular-loader", "#popular-carousel", 'popular');
+  });
+  $.get("https://smileschool-api.hbtn.info/latest-videos", (data) => {
+      createVideoCard(data, "#latest-loader", "#latest-carousel", 'latest');
+  });
+
+  $.get("https://smileschool-api.hbtn.info/courses", (data) => {
+      const capitalize = (word) => word.charAt(0).toUpperCase() + word.slice(1);
+      const {topics, sorts} = data;
+      topics.forEach((e) => {
+        e = capitalize(e);
+        $("#topic-options").append(`<option value="${e}">${e}</option>`);
+      });
+      sorts.forEach((e) => {
+        e = e.split("_").map((e) => capitalize(e)).join(" ");
+        $("#sort-options").append(`<option value="${e}">${e}</option>`);
       })
-    $.get("https://smileschool-api.hbtn.info/latest-videos", (data) => {
-        createVideoCard(data, "#latest-loader", "#latest-carousel", 'latest');
+      showRelevantCourses();
+
+  })
+
+  const showRelevantCourses = () => {
+    const capitalize = (word) => word.charAt(0).toUpperCase() + word.slice(1);
+    $("#courses-loader").show()
+    $("#filtered-cards-list").empty()
+    let search = $("#keyword-search").val();
+    search = capitalize(search);
+    console.log(search)
+    const topic = $("#topic-options option:selected ").val();
+    const sortBy = $("#sort-options option:selected").val();
+    $.get("https://smileschool-api.hbtn.info/courses", ({courses}) => {
+      courses.filter((e) =>
+        topic == "All" && !search.length ? e :
+        e.keywords.includes(search) ? e :
+        e.topic == topic ? e :
+        null
+      )
+      .sort((a, b) => {
+        if (sortBy == "Most Popular")  return b.star - a.star;
+        else if(sortBy == "Most Recent") return b.published_at - a.published_at;
+        else if (sortBy == "Most Viewed") return b.views - a.views;
+        else null;
+      })
+      .forEach((e) => {
+        $("#filtered-cards-list").append(createContent(e));
+        $("#filtered-cards-list .card-body").addClass("col-12 col-sm-12 col-md-6 col-lg-3");
+      })
+      $("#courses-loader").hide();
     })
+  }
 
-    const createVideoCard = (data, loader, carousel, id) => {
-        $(loader).hide()
-        for (let i = 0; i < data.length; i++) {
-            $(carousel).append(
-              `
-              <div class="carousel-item ${i === 0 ? "active" : ""}">
-                <div id="${id}${i}" class="col-12 col-sm-12 col-md-6 col-lg-3">
-                </div>
+  $(".form-control").change(() => showRelevantCourses());
+  $("#keyword-search").on("enter", () => showRelevantCourses());
+  
+  const createVideoCard = (data, loader, carousel, id) => {
+      $(loader).hide()
+      for (let i = 0; i < data.length; i++) {
+          $(carousel).append(
+            `
+            <div class="carousel-item ${i === 0 ? "active" : ""}">
+              <div id="${id}${i}" class="col-12 col-sm-12 col-md-6 col-lg-3">
               </div>
-              `
-            )
-          $(`#${id}${i}`).append(createTutorial(data[i]))
-        }
+            </div>
+            `
+          )
+        $(`#${id}${i}`).append(createContent(data[i]));
+      }
 
-        $(`${carousel} .carousel-item`).each(function () {
-            var minPerSlide = 3;
-            var next = $(this).next();
+      $(`${carousel} .carousel-item`).each(function () {
+          var minPerSlide = 3;
+          var next = $(this).next();
+          if (!next.length) {
+            next = $(this).siblings(':first');
+          }
+          next.children(':first-child').clone().appendTo($(this));
+    
+          for (var i = 0; i < minPerSlide; i++) {
+            next = next.next();
             if (!next.length) {
               next = $(this).siblings(':first');
             }
+    
             next.children(':first-child').clone().appendTo($(this));
-      
-            for (var i = 0; i < minPerSlide; i++) {
-              next = next.next();
-              if (!next.length) {
-                next = $(this).siblings(':first');
-              }
-      
-              next.children(':first-child').clone().appendTo($(this));
-            }
-          });
+          }
+        });
 
+  }
+  const createComment = (d, i) => {
+    return `
+        <div class="carousel-item ${i == 0 ? 'active' : ''}">
+            <div class="row flex-wrap justify-content-center mb-5">
+                <div class="col col-sm-4 col-md-2 mt-5 d-flex justify-content-xs-end justify-content-center">
+                <img class="img rounded-circle" src="${d.pic_url}" alt="${d.name}">
+                </div>
+                <div class="col-11 col-md-6 col-lg-8 item-content mt-5">
+                <h6 class="content-title pb-3 mr-sm-2">${d.text}</h6>
+                <p class="m-0 font-weight-bold">${d.name}</p>
+                <p class="m-0 font-italic">${d.title}</p>
+                </div>
+            </div>
+        </div>
+    `
+  }
+  const createContent = (e) => {
+    let stars = ""
+    for (let i=0; i < e.star; i++) {
+      stars += `<img src="images/star_on.png" class="stars" />`
     }
+    if (e.star < 5)
+      for (let i = e.star; i < 5; i++)
+        stars += `<img src="images/star_off.png" class="stars" />`
 
+    return `
+      <div class="card-body">
+          <div class="img-wrap d-flex align-items-center justify-content-center">
+              <img src=${e.thumb_url} alt="" class="img-fluid"/>
+              <div class="play-button row justify-content-center align-items-center">
+                  <img class="purple-text" src="images/play.png" alt="" />
+              </div>
+          </div>
+          <h4>${e.title}</h4>
+          <p class="text-muted">
+          ${e["sub-title"]}
+          </p>
+          <div class="row align-items-center">
+              <div class="col-2 col-md-4">
+                  <img src=${e.author_pic_url} alt="" class="img profile-img rounded-circle">
 
-    const createTutorial = (e) => {
-        return `
-                <div class="card-body">
-                    <div class="img-wrap d-flex align-items-center justify-content-center">
-                        <img src=${e.thumb_url} alt="" class="img-fluid"/>
-                        <div class="play-button row justify-content-center">
-                            <img class="purple-text" src="images/play.png" alt="" />
-                        </div>
-                    </div>
-                    <h4>${e.title}</h4>
-                    <p class="text-muted">
-                    ${e["sub-title"]}
-                    </p>
-                    <div class="row align-items-center">
-                        <div class="col-2 col-md-4">
-                            <img src=${e.author_pic_url} alt="" class="img profile-img rounded-circle">
-
-                        </div>
-                        <div class="col purple-text">
-                            ${e.author}
-                        </div>
-                    </div>
-                    <div class="row justify-content-between pt-3">
-                        <div class="col stars">
-                            <img src="images/star_on.png" alt="" class="stars" />
-                            <img src="images/star_on.png" alt="" class="stars" />
-                            <img src="images/star_on.png" alt="" class="stars" />
-                            <img src="images/star_on.png" alt="" class="stars" />
-                            <img src="images/star_off.png" alt="" class="stars" />
-                        </div>
-                    <div class="col-4">
-                        <p class="purple-text text-right">${e.duration}</p>
-                    </div>
-                </div>`
-    }
-
+              </div>
+              <div class="col purple-text">
+                  ${e.author}
+              </div>
+          </div>
+          <div class="row justify-content-between pt-3">
+              <div class="col stars">
+                  ${stars}
+              </div>
+          <div class="col-4">
+              <p class="purple-text text-right">${e.duration}</p>
+          </div>
+      </div>`
+  }
 })
