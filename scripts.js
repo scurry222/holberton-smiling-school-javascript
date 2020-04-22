@@ -34,6 +34,7 @@ $(document).ready(() => {
     const sortBy = $("#sort-options option:selected").val();
     $.get("https://smileschool-api.hbtn.info/courses", (data) => {
       const { courses } = data;
+      console.log(courses)
       courses.sort((a, b) => {
         if (sortBy == "Most Popular")  return b.star - a.star;
         else if (sortBy == "Most Recent") return b.published_at - a.published_at;
@@ -41,7 +42,7 @@ $(document).ready(() => {
         else null;
       })
       for (course of courses) {
-        if ((course.keywords.some((k, i) => k == search[i]) || !search) && (topic == course.topic || topic == "All")) {
+        if ((course.keywords.some((k) => search.includes(k)) || !search) && (topic == course.topic || topic == "All")) {
           $("#filtered-cards-list").append(createContent(course));
           $("#filtered-cards-list .card-body").addClass("col-12 col-sm-12 col-md-6 col-lg-3");
         }
