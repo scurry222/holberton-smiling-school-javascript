@@ -29,29 +29,23 @@ $(document).ready(() => {
     $("#courses-loader").show();
     $("#filtered-cards-list").empty();
     let search = $("#keyword-search").val();
-    if (search) search = search.charAt(0).toUpperCase() + search.slice(1);
-    console.log(search == 0)
+    if (search) search = search.split(" ").map((e) => e.charAt(0).toUpperCase() + e.slice(1))
     const topic = $("#topic-options option:selected ").val();
     const sortBy = $("#sort-options option:selected").val();
     $.get("https://smileschool-api.hbtn.info/courses", (data) => {
       const { courses } = data;
-      courses
-      .filter((e) =>
-        e.keywords.includes(search) ? e :
-       !search.length ? e :
-       e.topic === topic ? e :
-       null
-      )
-      .sort((a, b) => {
+      courses.sort((a, b) => {
         if (sortBy == "Most Popular")  return b.star - a.star;
         else if (sortBy == "Most Recent") return b.published_at - a.published_at;
         else if (sortBy == "Most Viewed") return b.views - a.views;
         else null;
       })
-      .forEach((e) => {
-        $("#filtered-cards-list").append(createContent(e));
-        $("#filtered-cards-list .card-body").addClass("col-12 col-sm-12 col-md-6 col-lg-3");
-      })
+      for (course of courses) {
+        if ((course.keywords.some((k, i) => k == search[i]) || !search) && (topic == course.topic || topic == "All")) {
+          $("#filtered-cards-list").append(createContent(course));
+          $("#filtered-cards-list .card-body").addClass("col-12 col-sm-12 col-md-6 col-lg-3");
+        }
+      }
       $("#courses-loader").hide();
     })
   }
