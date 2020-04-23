@@ -28,24 +28,26 @@ $(document).ready(() => {
   const showRelevantCourses = () => {
     $("#courses-loader").show();
     $("#filtered-cards-list").empty();
-    let search = $("#keyword-search").val();
-    if (search) search = search.split(" ").map((e) => e.charAt(0).toUpperCase() + e.slice(1))
+    const search = $("#keyword-search").val();
+    // if (search) search = search.split(" ").map((e) => e.charAt(0).toUpperCase() + e.slice(1))
     const topic = $("#topic-options option:selected ").val();
-    const sortBy = $("#sort-options option:selected").val();
-    $.get("https://smileschool-api.hbtn.info/courses", (data) => {
+    let sortBy = $("#sort-options option:selected").val();
+    if (sortBy) sortBy = sortBy.split(" ").map((e) => e.charAt(0).toLowerCase() + e.slice(1)).join("_")
+    console.log(sortBy)
+    $.get(`https://smileschool-api.hbtn.info/courses?q=${search}&topic=${topic}&sort=${sortBy}`, (data) => {
       const { courses } = data;
-      console.log(courses)
-      courses.sort((a, b) => {
-        if (sortBy == "Most Popular")  return b.star - a.star;
-        else if (sortBy == "Most Recent") return b.published_at - a.published_at;
-        else if (sortBy == "Most Viewed") return b.views - a.views;
-        else null;
-      })
+      // console.log(courses)
+      // courses.sort((a, b) => {
+      //   if (sortBy == "Most Popular")  return b.star - a.star;
+      //   else if (sortBy == "Most Recent") return b.published_at - a.published_at;
+      //   else if (sortBy == "Most Viewed") return b.views - a.views;
+      //   else null;
+      // })
       for (course of courses) {
-        if ((course.keywords.some((k) => search.includes(k)) || !search) && (topic == course.topic || topic == "All")) {
+        // if ((course.keywords.some((k) => search.includes(k)) || !search) && (topic == course.topic || topic == "All")) {
           $("#filtered-cards-list").append(createContent(course));
           $("#filtered-cards-list .card-body").addClass("col-12 col-sm-12 col-md-6 col-lg-3");
-        }
+        // }
       }
       $("#courses-loader").hide();
     })
